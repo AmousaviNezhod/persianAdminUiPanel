@@ -1,0 +1,12 @@
+.freebuff/
+
+# The extracted Larkon template is included; do not publish its source archive.
+larken/*.rar
+
+# Local credentials and generated files
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
