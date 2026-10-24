@@ -13,7 +13,7 @@
   const storageRead = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } };
   let orders = storageRead('sport-shoes-orders', seedOrders);
   let categories = storageRead('sport-shoes-categories', seedCategories);
-  const image = (src) => src.replace(/^\.\.\//, '');
+  const image = (src) => src;
   const showToast = (text) => { const toast = $('#admin-toast'); if (!toast) return; toast.textContent = text; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200); };
   const listRows = (items) => items.map((product) => `<tr data-product-row="${escapeHtml(product.id)}"><td><div class="d-flex align-items-center gap-2"><img class="admin-product-image" src="${image(product.image)}" alt="${escapeHtml(product.name)}"><span class="fw-semibold">${escapeHtml(product.name)}</span></div></td><td>${escapeHtml(product.category)}</td><td>${money(product.price)}</td><td>${new Intl.NumberFormat('fa-IR').format(product.stock)}</td><td><span class="badge ${product.stock ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">${product.stock ? 'فعال' : 'ناموجود'}</span></td><td><div class="admin-actions"><button type="button" class="btn btn-sm btn-soft-primary" data-edit-product="${escapeHtml(product.id)}">ویرایش</button><button type="button" class="btn btn-sm btn-soft-danger" data-delete-product="${escapeHtml(product.id)}">حذف</button></div></td></tr>`).join('');
   const renderProducts = () => {
