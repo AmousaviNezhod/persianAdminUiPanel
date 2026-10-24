@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sport Shoes | برای حرکت ساخته شده</title>
   <meta name="description" content="کفش‌های ورزشی انتخاب‌شده برای دویدن، تمرین و زندگی روزمره.">
-  <link rel="icon" href="larken/images/logo-sm.png"><link rel="stylesheet" href="larken/assets/css/icons.css"><link rel="stylesheet" href="store-assets/store.css">
+  <link rel="stylesheet" href="store-assets/store.css">
   <script src="store-assets/data.js" defer></script><script src="store-assets/app.js" defer></script>
 </head>
 <body data-page="home">

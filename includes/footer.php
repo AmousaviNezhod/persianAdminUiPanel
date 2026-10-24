@@ -16,5 +16,6 @@
       </div>
     </div>
     <div class="footer-bottom"><span>© ۱۴۰۵ Sport Shoes · تمامی حقوق محفوظ است.</span><span>حریم خصوصی　 ·　 شرایط استفاده</span></div>
+    <aside class="hosting-note" aria-label="نکات امنیت و استقرار"><strong>نکتهٔ امنیت و استقرار</strong><p>در هاست اشتراکی، PHP با دسترسی حساب cPanel اجرا می‌شود و ایزولاسیون کرنل یا Docker وجود ندارد؛ فقط کد مطمئن و بازبینی‌شده را بارگذاری کنید. برای نصب در زیرمسیرهایی مانند <code>/x/</code> از نشانی نسبی منابع (مثل <code>assets/...</code>) یا تگ <code>&lt;base href="/x/"&gt;</code> استفاده کنید؛ نشانی ریشه‌ای مثل <code>/assets/...</code> به ریشهٔ هاست اشاره می‌کند.</p></aside>
   </div>
 </footer>

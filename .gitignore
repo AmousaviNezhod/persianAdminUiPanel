@@ -1,6 +1,6 @@
 .freebuff/
 
-# The extracted Larkon template is included; do not publish its source archive.
+# Keep the local Larkon source archive out of the public repository.
 larken/*.rar
 
 # Local credentials and generated files
