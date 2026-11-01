@@ -1,16 +1,20 @@
+<?php require __DIR__ . '/includes/products.php'; ?>
 <!doctype html>
-<html lang="fa" dir="rtl" data-bs-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>محصولات | Sport Shoes</title><meta name="description" content="تمام کفش‌های ورزشی Sport Shoes را ببینید و بر اساس دسته و برند فیلتر کنید."><link rel="stylesheet" href="store-assets/store.css"><script src="store-assets/data.js" defer></script><script src="store-assets/app.js" defer></script></head>
-<body data-page="products"><?php require __DIR__ . '/includes/header.php'; ?><main class="store-main"><div data-heading></div><script>document.querySelector('[data-heading]').innerHTML='<div class="page-heading"><div class="store-container"><div class="breadcrumbs"><a href="index.php">خانه</a>　/　محصولات</div><h1 class="page-title">پیدا کردن جفت بعدی</h1><p class="section-copy">مدل‌های منتخب برای دویدن، تمرین، طبیعت‌گردی و روزهای معمولی.</p></div></div>';</script>
-  <div class="store-container products-layout">
-    <button class="filter-backdrop" type="button" data-close-filters aria-label="بستن فیلترها"></button>
-    <aside class="filter-panel" id="product-filters" aria-label="فیلتر محصولات" aria-hidden="false">
-      <div class="filter-modal-head"><h2>فیلتر محصولات</h2><button class="filter-close" type="button" data-close-filters aria-label="بستن فیلترها">×</button></div>
-      <form data-filter-form>
-        <div class="filter-group"><label for="category-filter">دسته‌بندی</label><select class="select" id="category-filter"><option value="">همه دسته‌ها</option><option>دویدن</option><option>تمرین</option><option>روزمره</option><option>طبیعت‌گردی</option></select></div>
-        <div class="filter-group"><label for="brand-filter">برند</label><select class="select" id="brand-filter"><option value="">همه برندها</option><option>Nike</option><option>Adidas</option><option>Salomon</option><option>Puma</option><option>Asics</option><option>New Balance</option><option>Converse</option><option>Reebok</option></select></div>
-        <div class="filter-group"><label for="price-min">محدوده قیمت (تومان)</label><div class="range-inputs"><input class="field" id="price-min" type="number" min="0" placeholder="از" aria-label="حداقل قیمت"><input class="field" id="price-max" type="number" min="0" placeholder="تا" aria-label="حداکثر قیمت"></div></div>
-        <div class="filter-actions"><button class="button secondary filter-reset" type="reset">پاک کردن فیلتر</button><button class="button filter-show-results" type="button" data-close-filters>نمایش نتایج</button></div>
-      </form>
-    </aside>
-    <section><form class="products-toolbar"><input class="field" id="catalog-search" type="search" placeholder="نام محصول را جست‌وجو کنید…" autocomplete="off"><select class="select" id="sort-products" aria-label="مرتب‌سازی"><option value="newest">جدیدترین</option><option value="price-low">قیمت: کم به زیاد</option><option value="price-high">قیمت: زیاد به کم</option></select><button class="button secondary filter-trigger" type="button" data-open-filters aria-controls="product-filters" aria-expanded="false">فیلترها <span aria-hidden="true">☷</span></button></form><p class="result-count" data-result-count></p><div class="product-grid" data-products-grid></div></section>
+<html lang="fa" dir="rtl" data-bs-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>محصولات | Sport Shoes</title><meta name="description" content="تمام کفش‌های ورزشی Sport Shoes را ببینید."><link rel="stylesheet" href="store-assets/store.css"><script src="store-assets/data.js" defer></script><script src="store-assets/app.js" defer></script></head>
+<body data-page="products"><?php require __DIR__ . '/includes/header.php'; ?><main class="store-main"><div class="page-heading"><div class="store-container"><div class="breadcrumbs"><a href="index.php">خانه</a>　/　محصولات</div><h1 class="page-title">پیدا کردن جفت بعدی</h1><p class="section-copy">مدل‌های منتخب برای دویدن، تمرین، طبیعت‌گردی و روزهای معمولی.</p></div></div>
+  <div class="store-container" style="padding:32px 0 70px">
+    <div class="product-grid">
+      <?php foreach ($products as $product): ?>
+        <article class="product-card">
+          <a class="product-image" href="<?= $product['link'] ?>" aria-label="مشاهده <?= $product['name'] ?>">
+            <img src="<?= $product['image'] ?>" alt="کفش ورزشی <?= $product['name'] ?>" loading="lazy">
+          </a>
+          <button class="product-heart" type="button" aria-label="افزودن <?= $product['name'] ?> به علاقه‌مندی‌ها">♡</button>
+          <div class="product-brand"><?= $product['description'] ?></div>
+          <h3 class="product-name"><a href="<?= $product['link'] ?>"><?= $product['name'] ?></a></h3>
+          <div class="product-row"><div class="price"><?= $product['price'] ?></div>
+            <button class="add-cart" type="button" data-add-cart="<?= $product['link'] ?>" aria-label="افزودن به سبد خرید">＋</button></div>
+        </article>
+      <?php endforeach; ?>
+    </div>
   </div></main><?php require __DIR__ . '/includes/footer.php'; ?></body></html>

@@ -15,82 +15,25 @@
     <button class="add-cart" type="button" data-add-cart="${product.id}" aria-label="افزودن به سبد خرید">＋</button></div>
   </article>`;
   const benefits = () => `<div class="features"><div><span class="eyebrow">SPORT SHOES SERVICE</span><h2 class="section-title" style="font-size:20px;margin:3px 0">خریدی مطمئن، از انتخاب تا قدم اول</h2></div><div class="feature"><span class="feature-icon">↗</span><div><strong>ارسال سریع</strong><span>ارسال به سراسر ایران</span></div></div><div class="feature"><span class="feature-icon">↺</span><div><strong>بازگشت آسان</strong><span>۷ روز برای تصمیم بهتر</span></div></div><div class="feature"><span class="feature-icon">✓</span><div><strong>اصالت کالا</strong><span>انتخاب‌شده با دقت</span></div></div></div>`;
-  const showProducts = (items, target) => { if (!target) return; target.innerHTML = items.length ? items.map(card).join('') : '<div class="empty-state">محصولی با این مشخصات پیدا نشد. فیلترها را تغییر دهید.</div>'; };
   const setupHome = () => {
-    const target = $('[data-home-products]');
-    showProducts(catalog.products.slice(0, 9), target);
     const benefitsTarget = $('[data-store-benefits]');
     if (benefitsTarget) benefitsTarget.innerHTML = benefits();
-    const slides = [
-      { eyebrow: 'کالکشن تمرین ۱۴۰۵', title: 'هر قدم،\nیک شروع تازه', text: 'کفش‌هایی برای مسیرهای روزانه و تمرین‌های بی‌وقفه. مدل بعدی‌ات را پیدا کن.', product: 'velocity-pro', image: 'photo-1542291026-7eec264c27ff' },
-      { eyebrow: 'روزهای پرتحرک', title: 'سبک‌تر حرکت کن', text: 'راحتیِ تمام‌روز، با انتخاب‌هایی که برای حرکت ساخته شده‌اند.', product: 'urban-flex', image: 'photo-1552346154-21d32810aba3' },
-      { eyebrow: 'آماده مسیر بعدی', title: 'از شهر تا مسیر', text: 'پشتیبانی و چسبندگی بیشتر برای تجربه‌های تازه در فضای باز.', product: 'trail-motion', image: 'photo-1460353581641-37baddab0fa2' },
-    ];
+    const slider = $('.hero-slider');
+    if (!slider) return;
+    const slides = Array.from(slider.querySelectorAll('.hero-slide'));
+    const dots = Array.from(slider.querySelectorAll('.hero-dot'));
+    if (!slides.length) return;
     let active = 0;
-    let hasPainted = false;
-    let slideTransitionTimer;
-    const paint = () => {
-      const slide = slides[active]; const product = catalog.products.find((item) => item.id === slide.product);
-      const media = $('[data-hero-image]'); const copy = $('.hero-copy');
-      const update = () => {
-        $('[data-hero-eyebrow]').textContent = slide.eyebrow;
-        $('[data-hero-title]').textContent = slide.title;
-        $('[data-hero-copy]').textContent = slide.text;
-        $('[data-hero-link]').href = `product.php?id=${product.id}`;
-        media.style.backgroundImage = `linear-gradient(90deg,rgba(15,18,21,.08),rgba(15,18,21,.22)),url(https://images.unsplash.com/${slide.image}?auto=format&fit=crop&w=1400&q=88)`;
-        document.querySelectorAll('.hero-dot').forEach((dot, index) => dot.classList.toggle('active', index === active));
-      };
-      window.clearTimeout(slideTransitionTimer);
-      if (!hasPainted || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { update(); hasPainted = true; return; }
-      media.classList.add('is-changing'); copy.classList.add('is-changing');
-      slideTransitionTimer = window.setTimeout(() => {
-        update();
-        requestAnimationFrame(() => requestAnimationFrame(() => { media.classList.remove('is-changing'); copy.classList.remove('is-changing'); }));
-      }, 150);
+    const paint = (index) => {
+      active = (index + slides.length) % slides.length;
+      slides.forEach((slide, position) => slide.classList.toggle('active', position === active));
+      dots.forEach((dot, position) => dot.classList.toggle('active', position === active));
     };
-    document.querySelectorAll('.hero-dot').forEach((dot) => dot.addEventListener('click', () => { active = Number(dot.dataset.slide); paint(); }));
-    $('[data-hero-prev]').addEventListener('click', () => { active = (active + slides.length - 1) % slides.length; paint(); });
-    $('[data-hero-next]').addEventListener('click', () => { active = (active + 1) % slides.length; paint(); });
-    paint();
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) window.setInterval(() => { active = (active + 1) % slides.length; paint(); }, 6500);
-  };
-  const setupProducts = () => {
-    const filterForm = $('[data-filter-form]'); const search = $('#catalog-search'); const category = $('#category-filter'); const brand = $('#brand-filter'); const sort = $('#sort-products');
-    if (!search || !category || !brand || !sort || !filterForm) return;
-    const min = $('#price-min'); const max = $('#price-max');
-    const query = new URLSearchParams(location.search); if (query.has('category')) category.value = query.get('category');
-    const filter = () => {
-      let result = catalog.products.filter((item) => item.name.toLocaleLowerCase('fa').includes(search.value.trim().toLocaleLowerCase('fa')) && (!category.value || item.category === category.value) && (!brand.value || item.brand === brand.value) && item.price >= (Number(min.value) || 0) && item.price <= (Number(max.value) || Infinity));
-      if (sort.value === 'price-low') result.sort((a, b) => a.price - b.price);
-      if (sort.value === 'price-high') result.sort((a, b) => b.price - a.price);
-      showProducts(result, $('[data-products-grid]'));
-      $('[data-result-count]').textContent = `${new Intl.NumberFormat('fa-IR').format(result.length)} محصول`;
-      const selected = [category.value, brand.value, min.value, max.value].filter(Boolean).length;
-      const trigger = $('[data-open-filters]');
-      if (trigger) { trigger.classList.toggle('has-filters', selected > 0); trigger.setAttribute('aria-label', selected ? `فیلترها، ${selected} مورد فعال` : 'فیلتر محصولات'); }
-    };
-    filterForm.addEventListener('input', filter); filterForm.addEventListener('change', filter);
-    filterForm.addEventListener('reset', (event) => { event.preventDefault(); category.value = ''; brand.value = ''; min.value = ''; max.value = ''; filter(); });
-    search.addEventListener('input', filter); sort.addEventListener('change', filter);
-    document.addEventListener('click', (event) => {
-      if (event.target.closest('[data-open-filters]')) {
-        const panel = $('#product-filters'); $('#product-filters')?.classList.add('open'); document.documentElement.classList.add('filters-open'); $('[data-close-filters].filter-backdrop')?.classList.add('open');
-        panel?.setAttribute('aria-hidden', 'false'); $('[data-open-filters]')?.setAttribute('aria-expanded', 'true');
-        if (window.matchMedia('(max-width: 640px)').matches) $('[data-close-filters].filter-close')?.focus();
-      }
-      if (event.target.closest('[data-close-filters]')) {
-        $('#product-filters')?.classList.remove('open'); document.documentElement.classList.remove('filters-open'); $('[data-close-filters].filter-backdrop')?.classList.remove('open');
-        $('#product-filters')?.setAttribute('aria-hidden', 'true'); $('[data-open-filters]')?.setAttribute('aria-expanded', 'false');
-        if (window.matchMedia('(max-width: 640px)').matches) $('[data-open-filters]')?.focus();
-      }
-    });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && $('#product-filters')?.classList.contains('open')) {
-        $('#product-filters').classList.remove('open'); document.documentElement.classList.remove('filters-open'); $('[data-close-filters].filter-backdrop')?.classList.remove('open');
-        $('#product-filters').setAttribute('aria-hidden', 'true'); $('[data-open-filters]')?.setAttribute('aria-expanded', 'false'); $('[data-open-filters]')?.focus();
-      }
-    });
-    filter();
+    dots.forEach((dot, position) => dot.addEventListener('click', () => paint(position)));
+    $('[data-hero-prev]', slider).addEventListener('click', () => paint(active - 1));
+    $('[data-hero-next]', slider).addEventListener('click', () => paint(active + 1));
+    paint(0);
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) window.setInterval(() => paint(active + 1), 6500);
   };
   const setupDetails = () => {
     const params = new URLSearchParams(location.search); const product = catalog.products.find((item) => item.id === params.get('id')) || catalog.products[0];
@@ -148,7 +91,7 @@
   };
   document.addEventListener('click', (event) => {
     const add = event.target.closest('[data-add-cart]');
-    if (add) { event.preventDefault(); const success = catalog.addToCart(add.dataset.addCart, Number(add.dataset.quantity || 1), add.dataset.size || null); renderCart(); notify(success ? 'به سبد خرید اضافه شد.' : 'این محصول در حال حاضر موجود نیست.'); }
+    if (add) { event.preventDefault(); const reference = add.dataset.addCart; const id = reference.includes('?') ? new URL(reference, location.href).searchParams.get('id') : reference; const success = catalog.addToCart(id, Number(add.dataset.quantity || 1), add.dataset.size || null); renderCart(); notify(success ? 'به سبد خرید اضافه شد.' : 'این محصول در حال حاضر موجود نیست.'); }
     if (event.target.closest('[data-open-cart]')) { const drawer = $('[data-cart-drawer]'); if (!drawer) return; drawer.classList.add('open'); document.documentElement.classList.add('cart-open'); $('[data-cart-backdrop]')?.classList.add('open'); drawer.setAttribute('aria-hidden', 'false'); renderCart(); $('[data-close-cart].cart-drawer-close')?.focus(); }
     if (event.target.closest('[data-close-cart]')) { $('[data-cart-drawer]')?.classList.remove('open'); document.documentElement.classList.remove('cart-open'); $('[data-cart-backdrop]')?.classList.remove('open'); $('[data-cart-drawer]')?.setAttribute('aria-hidden', 'true'); $('[data-open-cart]')?.focus(); }
     const remove = event.target.closest('[data-remove-cart]');
@@ -176,14 +119,11 @@
     const nav = document.body.dataset.page; document.querySelectorAll(`[data-nav="${nav}"]`).forEach((link) => link.classList.add('active'));
     renderCart();
     if (document.body.dataset.page === 'home') setupHome();
-    if (document.body.dataset.page === 'products') setupProducts();
     if (document.body.dataset.page === 'details') setupDetails();
     if (document.body.dataset.page === 'contact') setupContact();
     setupScrollReveal();
     document.addEventListener('sport-shoes:cart', renderCart);
     document.addEventListener('sport-shoes:products', () => {
-      if (document.body.dataset.page === 'home') showProducts(catalog.products.slice(0, 9), $('[data-home-products]'));
-      if (document.body.dataset.page === 'products') setupProducts();
       if (document.body.dataset.page === 'details') setupDetails();
     });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape') { if ($('[data-cart-drawer]')?.classList.contains('open')) { $('[data-cart-drawer]')?.classList.remove('open'); document.documentElement.classList.remove('cart-open'); $('[data-cart-backdrop]')?.classList.remove('open'); $('[data-cart-drawer]')?.setAttribute('aria-hidden', 'true'); $('[data-open-cart]')?.focus(); } if ($('[data-mobile-drawer]')?.classList.contains('open')) { $('[data-mobile-drawer]')?.classList.remove('open'); $('[data-mobile-drawer]')?.setAttribute('aria-hidden', 'true'); $('[data-mobile-menu-backdrop]')?.classList.remove('open'); $('[data-mobile-menu]')?.focus(); } } });
