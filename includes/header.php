@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/products-json.php';
 $currentPage = basename($_SERVER['SCRIPT_NAME'] ?? 'index.php');
 $navItems = [
     'index.php' => ['home', 'خانه'],
@@ -18,6 +22,14 @@ $navItems = [
     <div class="store-actions">
       <a class="icon-button search-action" href="products.php#catalog-search" aria-label="جست‌وجوی محصولات">⌕</a>
       <button class="icon-button" type="button" data-open-cart aria-label="نمایش سبد خرید">♧<span class="cart-count" data-cart-count>۰</span></button>
+      <?php if (isset($_SESSION['user_id'])): ?>
+        <a class="user-chip" href="panel.php" aria-label="پنل کاربری <?= htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') ?>">
+          <img class="user-avatar" src="<?= htmlspecialchars($_SESSION['user_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') ?>">
+          <span><?= htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') ?></span>
+        </a>
+      <?php else: ?>
+        <a class="login-link" href="login.php">ورود</a>
+      <?php endif; ?>
       <button class="icon-button mobile-menu" type="button" data-mobile-menu aria-label="باز کردن منو">☰</button>
     </div>
   </nav>
@@ -30,6 +42,11 @@ $navItems = [
     <?php foreach ($navItems as $href => [$page, $label]): ?>
       <a href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>" data-nav="<?= htmlspecialchars($page, ENT_QUOTES, 'UTF-8') ?>"<?= $currentPage === $href ? ' class="active" aria-current="page"' : '' ?>><span><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span><span class="mobile-nav-arrow" aria-hidden="true">←</span></a>
     <?php endforeach; ?>
+    <?php if (isset($_SESSION['user_id'])): ?>
+      <a href="panel.php" data-nav="panel"><span>پنل کاربری</span><span class="mobile-nav-arrow" aria-hidden="true">←</span></a>
+    <?php else: ?>
+      <a href="login.php" data-nav="login"><span>ورود به حساب</span><span class="mobile-nav-arrow" aria-hidden="true">←</span></a>
+    <?php endif; ?>
   </nav>
   <p class="mobile-nav-note">برای حرکت ساخته شده.</p>
 </aside>
