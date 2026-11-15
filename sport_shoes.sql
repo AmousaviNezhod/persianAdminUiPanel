@@ -92,7 +92,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'امیر موسوی نژاد','amir','$2y$10$gq2/uErU5Pp2FuVkCZlFjOFZkrabQsspRNgcx7WMmtbPuYlDx81XC','https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80'),(2,'سارا احمدی','sara','$2y$10$gq2/uErU5Pp2FuVkCZlFjOFZkrabQsspRNgcx7WMmtbPuYlDx81XC','https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80');
+INSERT INTO `users` VALUES (1,'امیر موسوی نژاد','amir','123456','https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80'),(2,'سارا احمدی','sara','123456','https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

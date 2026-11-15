@@ -70,5 +70,5 @@ INSERT INTO features (icon, title, description) VALUES
 ('✓', 'اصالت کالا', 'انتخاب‌شده با دقت');
 
 INSERT INTO users (name, username, password, image) VALUES
-('امیر موسوی نژاد', 'amir', '$2y$10$gq2/uErU5Pp2FuVkCZlFjOFZkrabQsspRNgcx7WMmtbPuYlDx81XC', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80'),
-('سارا احمدی', 'sara', '$2y$10$gq2/uErU5Pp2FuVkCZlFjOFZkrabQsspRNgcx7WMmtbPuYlDx81XC', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80');
+('امیر موسوی نژاد', 'amir', '123456', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80'),
+('سارا احمدی', 'sara', '123456', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80');

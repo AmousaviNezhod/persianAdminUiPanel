@@ -1,18 +1,9 @@
 <?php
 session_start();
-require __DIR__ . '/includes/db.php';
-$product_id = (string) ($_GET['id'] ?? '');
-$product_stmt = mysqli_prepare($conn, "SELECT * FROM products WHERE slug = ?");
-mysqli_stmt_bind_param($product_stmt, 's', $product_id);
-mysqli_stmt_execute($product_stmt);
-$product = mysqli_fetch_assoc(mysqli_stmt_get_result($product_stmt));
-if (!$product) {
-    $product = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM products ORDER BY id LIMIT 1"));
-}
-$related_stmt = mysqli_prepare($conn, "SELECT * FROM products WHERE category = ? AND id <> ? ORDER BY id LIMIT 3");
-mysqli_stmt_bind_param($related_stmt, 'si', $product['category'], $product['id']);
-mysqli_stmt_execute($related_stmt);
-$related = mysqli_stmt_get_result($related_stmt);
+include 'includes/db.php';
+$product_id = $_GET['id'] ?? '';
+$product = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM products WHERE slug = '$product_id'"));
+$related = mysqli_query($conn, "SELECT * FROM products WHERE category = '" . $product['category'] . "' AND id != " . $product['id'] . " LIMIT 3");
 $sizes = explode(',', $product['sizes']);
 ?>
 <!doctype html>

@@ -1,31 +1,20 @@
 <?php
 session_start();
-require __DIR__ . '/includes/db.php';
-if (isset($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit;
-}
+include 'includes/db.php';
 $username = '';
 $error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim((string) ($_POST['username'] ?? ''));
-    $password = (string) ($_POST['password'] ?? '');
-    if ($username === '' || $password === '') {
-        $error = 'نام کاربری و رمز عبور را وارد کنید.';
+if (isset($_POST['username'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $user = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE username = '$username' AND password = '$password'"));
+    if ($user) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['name'];
+        $_SESSION['user_username'] = $user['username'];
+        $_SESSION['user_image'] = $user['image'];
+        header('Location: index.php');
+        exit;
     } else {
-        $login_stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE username = ?");
-        mysqli_stmt_bind_param($login_stmt, 's', $username);
-        mysqli_stmt_execute($login_stmt);
-        $user = mysqli_fetch_assoc(mysqli_stmt_get_result($login_stmt));
-        if ($user && password_verify($password, $user['password'])) {
-            session_regenerate_id(true);
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_username'] = $user['username'];
-            $_SESSION['user_image'] = $user['image'];
-            header('Location: index.php');
-            exit;
-        }
         $error = 'نام کاربری یا رمز عبور اشتباه است.';
     }
 }
